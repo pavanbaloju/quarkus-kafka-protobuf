@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres
+    container_name: pact-postgres
     healthcheck:
       test: psql postgres --command "select 1" -U postgres
     volumes:
@@ -14,6 +15,7 @@ services:
 
   pact-broker:
     image: "pactfoundation/pact-broker:2.110.0-pactbroker2.107.1"
+    container_name: pact-broker
     ports:
       - "9292:9292"
     depends_on:

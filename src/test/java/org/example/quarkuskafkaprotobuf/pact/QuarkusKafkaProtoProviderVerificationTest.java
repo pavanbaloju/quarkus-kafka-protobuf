@@ -8,7 +8,9 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.Consumer;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import com.example.kafkaprotobuf.Address;
 import com.example.kafkaprotobuf.Person;
+import com.example.kafkaprotobuf.PhoneNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +20,12 @@ import java.util.Map;
 @Provider("quarkusKafkaProtoProducer")
 @Consumer("quarkusKafkaProtoConsumer")
 @PactBroker(url = "http://localhost:9292/")
-class KafkaProtoProviderVerificationTest {
+class QuarkusKafkaProtoProviderVerificationTest {
 
     @BeforeEach
     void before(PactVerificationContext context) {
         System.setProperty("pact.verifier.publishResults", "true");
+        System.setProperty("pact_do_not_track", "true");
         context.setTarget(new MessageTestTarget());
     }
 
@@ -32,10 +35,17 @@ class KafkaProtoProviderVerificationTest {
         context.verifyInteraction();
     }
 
-    @PactVerifyProvider("message with person details")
-    MessageAndMetadata verifyPersonMessage() {
-        Person person = Person.newBuilder().setName("Pavan").setAge(50).build();
+    @PactVerifyProvider("message with personal info")
+    MessageAndMetadata verifyPersonalInfoMessage() {
         Map<String, Object> metadata = Map.of("content-type", "application/protobuf");
+        Person person = Person.newBuilder()
+            .setName("JOHN")
+            .setAge(50)
+            .setEmail("abc@gmail.com")
+            .setAddress(Address.newBuilder().setState("TELANGANA").setZipCode("500001").build())
+//            .setPhoneNumbers(0, PhoneNumber.newBuilder().setNumber("9999888870").setType(PhoneNumber.Type.MOBILE).build())
+            .setIsStudent(true)
+            .build();
 
         return new MessageAndMetadata(person.toByteArray(), metadata);
     }
