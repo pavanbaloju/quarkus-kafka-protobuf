@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.List;
 import java.util.Map;
 
 @Provider("quarkusKafkaProtoProducer")
@@ -42,9 +43,9 @@ class QuarkusKafkaProtoProviderVerificationTest {
             .setName("JOHN")
             .setAge(50)
             .setEmail("abc@gmail.com")
-            .setAddress(Address.newBuilder().setStreet("STREET").setCity("CITY").setState("TELANGANA").setZipCode("500001").build())
-//            .setPhoneNumbers(0, PhoneNumber.newBuilder().setNumber("9999888870").setType(PhoneNumber.Type.MOBILE).build())
-//            .setIsStudent(true)
+            .setAddress(Address.newBuilder().setCity("CITY").setState("TELANGANA").setZipCode("500001").build())
+            .addAllPhoneNumbers(List.of(PhoneNumber.newBuilder().setNumber("9999888870").setType(PhoneNumber.Type.MOBILE).build()))
+            .putAllGrades(Map.of("math", 10))
             .build();
 
         return new MessageAndMetadata(person.toByteArray(), metadata);
