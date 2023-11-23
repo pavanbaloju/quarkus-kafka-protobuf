@@ -39,6 +39,8 @@ class QuarkusKafkaProtoConsumerContractTest {
                     "age", "matching(integer, 50)",
                     "email", "matching(equalTo, 'abc@gmail.com')",
                     "address", Map.of(
+                        "street", "matching(regex, '^[A-Z]*$', 'MY STREET')",
+                        "city", "matching(regex, '^[A-Z]*$', 'MY CITY')",
                         "state", "matching(regex, '^[A-Z]*$', 'TELANGANA')",
                         "zip_code", "matching(regex, '^[1-9]{1}[0-9]{5}$', '500001')"
                     )
@@ -49,7 +51,7 @@ class QuarkusKafkaProtoConsumerContractTest {
 //                            "type", "matching(type, 'MOBILE')"
 //                        )
 //                    )
-                    //                    "is_student", "matching(boolean, true)"
+//                    "is_student", "matching(boolean, true)"
                 )
             ))
             .toPact();
@@ -65,16 +67,21 @@ class QuarkusKafkaProtoConsumerContractTest {
         assertEquals("abc@gmail.com", person.getEmail());
 
         Address address = person.getAddress();
+        assertEquals("MY STREET", address.getStreet());
+        assertEquals("MY CITY", address.getCity());
         assertEquals("TELANGANA", address.getState());
         assertEquals("500001", address.getZipCode());
 
         List<PhoneNumber> phoneNumbersList = person.getPhoneNumbersList();
-//        assertEquals(1, phoneNumbersList.size());
-//        phoneNumbersList.forEach(phoneNumber -> {
-//            assertEquals("9999888870", phoneNumber.getNumber());
-//            assertEquals(PhoneNumber.Type.MOBILE, phoneNumber.getType());
-//        });
+        //        assertEquals(1, phoneNumbersList.size());
+        //        phoneNumbersList.forEach(phoneNumber -> {
+        //            assertEquals("9999888870", phoneNumber.getNumber());
+        //            assertEquals(PhoneNumber.Type.MOBILE, phoneNumber.getType());
+        //        });
 
         //        assertTrue(person.getIsStudent());
+
+//        List<Integer> grades = person.getGradesList();
+//        assertEquals(1, grades.size());
     }
 }
