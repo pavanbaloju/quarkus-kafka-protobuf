@@ -43,9 +43,10 @@ class QuarkusKafkaProtoProviderVerificationTest {
             .setName("JOHN")
             .setAge(50)
             .setEmail("abc@gmail.com")
-            .setAddress(Address.newBuilder().setCity("CITY").setState("TELANGANA").setZipCode("500001").build())
+            .setAddress(Address.newBuilder().setCity("CITY").setState("TELANGANA").setZipCode("500001").setIndian(true).build())
             .addAllPhoneNumbers(List.of(PhoneNumber.newBuilder().setNumber("9999888870").setType(PhoneNumber.Type.MOBILE).build()))
             .putAllGrades(Map.of("math", 10))
+            .setIsStudent(true)
             .build();
 
         return new MessageAndMetadata(person.toByteArray(), metadata);

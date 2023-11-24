@@ -1,7 +1,7 @@
 package org.example.quarkuskafkaprotobuf.pact;
 
 import au.com.dius.pact.consumer.dsl.PactBuilder;
-import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
+import au.com.dius.pact.consumer.junit5.PactConsumerTest;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.consumer.junit5.ProviderType;
 import au.com.dius.pact.core.model.PactSpecVersion;
@@ -13,7 +13,6 @@ import com.example.kafkaprotobuf.Person;
 import com.example.kafkaprotobuf.PhoneNumber;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(PactConsumerTestExt.class)
+@PactConsumerTest
 @PactTestFor(providerName = "quarkusKafkaProtoProducer", providerType = ProviderType.ASYNCH, pactVersion = PactSpecVersion.V4)
 class QuarkusKafkaProtoConsumerContractTest {
 
@@ -42,7 +41,8 @@ class QuarkusKafkaProtoConsumerContractTest {
                     "address", Map.of(
                         "city", "matching(regex, '^[A-Z]*$', 'MY CITY')",
                         "state", "matching(regex, '^[A-Z]*$', 'TELANGANA')",
-                        "zip_code", "matching(regex, '^[1-9]{1}[0-9]{5}$', '500001')"
+                        "zip_code", "matching(regex, '^[1-9]{1}[0-9]{5}$', '500001')",
+                        "indian", "matching(boolean, true)"
                     ),
                     "phone_numbers", Map.of(
                         "pact:match", "eachValue(matching($'phone_number'))",
@@ -53,7 +53,8 @@ class QuarkusKafkaProtoConsumerContractTest {
                     ),
                     "grades", Map.of(
                         "pact:match", "eachKey(matching(regex, '^[a-z]*$', 'math')), eachValue(matching(integer, 10))"
-                    )
+                    ),
+                    "is_student", "matching(boolean, true)"
                 )
             ))
             .toPact();
@@ -72,6 +73,7 @@ class QuarkusKafkaProtoConsumerContractTest {
         assertEquals("MY CITY", address.getCity());
         assertEquals("TELANGANA", address.getState());
         assertEquals("500001", address.getZipCode());
+        assertTrue(address.getIndian());
 
         List<PhoneNumber> phoneNumbersList = person.getPhoneNumbersList();
         assertEquals(1, phoneNumbersList.size());
@@ -79,5 +81,6 @@ class QuarkusKafkaProtoConsumerContractTest {
             assertEquals("9999888870", phoneNumber.getNumber());
             assertEquals(PhoneNumber.Type.MOBILE, phoneNumber.getType());
         });
+        assertTrue(person.getIsStudent());
     }
 }
