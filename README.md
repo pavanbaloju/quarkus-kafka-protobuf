@@ -4,6 +4,11 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+## Installing the pact protobuf plugin to run the consumer tests
+Copy the `plugins` folder from the repository to `$HOME/.pact`. 
+This a quick fix instead of the preferred way of installation as described here https://github.com/pact-foundation/pact-plugins/blob/main/plugins/protobuf/README.md
+> cp -r plugins/   ~/.pact/plugins
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
